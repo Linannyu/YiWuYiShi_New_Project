@@ -15,18 +15,14 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
             color: #242933;
-            background: #fff;
+            background: transparent;
         }
 
         /* ── 整页网格底纹 ── */
         .mihoyo-section {
             position: relative;
             padding: 48px 0 64px;
-            background-color: #fafbfc;
-            background-image:
-                linear-gradient(rgba(220, 224, 230, 0.55) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(220, 224, 230, 0.55) 1px, transparent 1px);
-            background-size: 40px 40px;
+            background: transparent;
         }
 
         /* 固定画布，整体缩放（米哈游同款比例） */
@@ -330,8 +326,10 @@
             border-color: #3778e5;
         }
 
-        /* 响应式：整画布等比缩放 */
-        @media (max-width: 1400px) {
+        /* ── 响应式 ── */
+
+        /* 笔记本 / 小桌面：等比缩放 */
+        @media (max-width: 1400px) and (min-width: 901px) {
             .stage {
                 transform: scale(calc((100vw - 32px) / 1360));
             }
@@ -340,10 +338,161 @@
             }
         }
 
-        @media (max-width: 720px) {
-            .stage-wrap { overflow-x: auto; justify-content: flex-start; }
-            .stage { transform: scale(0.52); transform-origin: top left; }
-            .stage-wrap { height: 350px; }
+        /* iPad 竖屏 / 小平板：等比缩放 */
+        @media (max-width: 900px) and (min-width: 601px) {
+            .mihoyo-section {
+                padding: 32px 0 48px;
+            }
+            .stage {
+                transform: scale(calc((100vw - 24px) / 1360));
+            }
+            .stage-wrap {
+                height: calc(660px * ((100vw - 24px) / 1360));
+            }
+        }
+
+        /* 手机：纵向堆叠布局 */
+        @media (max-width: 600px) {
+            .mihoyo-section {
+                padding: 24px 0 32px;
+            }
+
+            .stage-wrap {
+                height: auto;
+                overflow: visible;
+            }
+
+            .stage {
+                width: 100%;
+                height: auto;
+                transform: none;
+                padding: 0 16px;
+                display: flex;
+                flex-direction: column;
+                gap: 28px;
+            }
+
+            .side-label {
+                display: none;
+            }
+
+            .news-content {
+                position: relative;
+                left: auto;
+                top: auto;
+                width: 100%;
+                height: auto;
+                padding-left: 20px;
+            }
+
+            .news-content::before {
+                left: 0;
+            }
+
+            .news-date .date {
+                font-size: 72px;
+            }
+
+            .news-date .year {
+                font-size: 24px;
+            }
+
+            .news-title {
+                font-size: 22px;
+                min-height: auto;
+            }
+
+            .news-desc {
+                height: auto;
+                -webkit-line-clamp: 5;
+                line-clamp: 5;
+            }
+
+            .news-footer {
+                position: relative;
+                top: auto;
+                margin-top: 4px;
+            }
+
+            .read-more {
+                margin-bottom: 20px;
+            }
+
+            .page-btn {
+                width: 38px;
+                height: 38px;
+                font-size: 14px;
+            }
+
+            .visual-area {
+                position: relative;
+                left: auto;
+                top: auto;
+                width: 100%;
+                height: 360px;
+            }
+
+            .stripe-deco {
+                right: 8%;
+                top: 24px;
+                width: 72%;
+                height: 300px;
+            }
+
+            .banner-main {
+                left: 50%;
+                top: 48px;
+                transform: translateX(-58%);
+                width: 78%;
+                max-width: 320px;
+                height: 280px;
+            }
+
+            .news-banner:hover .banner-main img {
+                transform: scale(1.03);
+            }
+
+            .banner-text {
+                font-size: 28px;
+                padding-bottom: 36px;
+            }
+
+            .view-more-wrap {
+                position: relative;
+                bottom: auto;
+                left: auto;
+                transform: none;
+                text-align: center;
+                margin-top: 4px;
+            }
+
+            .view-more-btn {
+                padding: 12px 48px;
+                font-size: 13px;
+            }
+        }
+
+        /* 超小屏手机 */
+        @media (max-width: 380px) {
+            .news-date .date {
+                font-size: 60px;
+            }
+
+            .news-title {
+                font-size: 20px;
+            }
+
+            .visual-area {
+                height: 320px;
+            }
+
+            .banner-main {
+                height: 240px;
+            }
+
+            .stripe-deco {
+                height: 260px;
+            }
         }
     </style>
 </head>
