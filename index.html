@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>采访的展示</title>
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -13,7 +14,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+            font-family: 'ZCOOL KuaiLe', "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
             color: #242933;
             background: transparent;
         }
@@ -21,7 +22,7 @@
         /* ── 整页网格底纹 ── */
         .mihoyo-section {
             position: relative;
-            padding: 48px 0 64px;
+            padding: 0 0 64px;
             background: transparent;
         }
 
@@ -60,7 +61,7 @@
         .news-content {
             position: absolute;
             left: 108px;
-            top: 72px;
+            top: 0;
             width: 400px;
             height: 500px;
             z-index: 10;
@@ -203,9 +204,12 @@
         .visual-area {
             position: absolute;
             left: 480px;
-            top: 28px;
+            top: 0;
             width: 800px;
             height: 540px;
+            transition: opacity 0.48s cubic-bezier(0.32, 0.72, 0, 1),
+                        transform 0.48s cubic-bezier(0.32, 0.72, 0, 1),
+                        filter 0.4s ease;
         }
 
         .news-banner {
@@ -260,13 +264,211 @@
         .banner-main {
             position: absolute;
             left: 300px;
-            top: 100px;
+            top: 72px;
             width: 400px;
             height: 380px;
             z-index: 3;
             overflow: hidden;
-            background: #e8ebf0;
+            background: transparent;
             transition: opacity 0.35s;
+        }
+
+        /* ── 科技感换页动效 ── */
+        .tech-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 40;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .tech-scan {
+            position: absolute;
+            left: -10%;
+            width: 120%;
+            height: 2px;
+            top: 0;
+            opacity: 0;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(55, 120, 229, 0.2) 20%,
+                #5ee7ff 50%,
+                rgba(55, 120, 229, 0.2) 80%,
+                transparent 100%);
+            box-shadow: 0 0 16px rgba(94, 231, 255, 0.9), 0 0 32px rgba(55, 120, 229, 0.5);
+        }
+
+        .stage.tech-active .tech-scan {
+            animation: techScanMove 0.72s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .tech-flash {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            background:
+                linear-gradient(rgba(55, 120, 229, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(55, 120, 229, 0.06) 1px, transparent 1px),
+                radial-gradient(ellipse at 70% 40%, rgba(55, 120, 229, 0.12), transparent 55%);
+            background-size: 24px 24px, 24px 24px, 100% 100%;
+        }
+
+        .stage.tech-active .tech-flash {
+            animation: techFlashPulse 0.72s ease forwards;
+        }
+
+        .news-content {
+            transition: none;
+        }
+
+        .news-content.tech-out {
+            animation: techContentOut 0.42s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+        }
+
+        .news-content.tech-in .news-date {
+            animation: techTextReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.06s both;
+        }
+
+        .news-content.tech-in .news-title {
+            animation: techTextReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both;
+        }
+
+        .news-content.tech-in .news-desc {
+            animation: techTextReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.26s both;
+        }
+
+        .news-content.tech-in::before {
+            animation: techBarGrow 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.02s both;
+        }
+
+        .visual-area.tech-out {
+            animation: techVisualOut 0.42s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+        }
+
+        .visual-area.tech-in .stripe-deco {
+            animation: techStripeIn 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+        }
+
+        .visual-area.tech-in .banner-main img {
+            animation: techImageIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .visual-area.tech-in .banner-text {
+            animation: techTextReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+        }
+
+        .banner-main::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            pointer-events: none;
+            background: linear-gradient(105deg,
+                transparent 38%,
+                rgba(255, 255, 255, 0.08) 46%,
+                rgba(94, 231, 255, 0.22) 50%,
+                rgba(255, 255, 255, 0.08) 54%,
+                transparent 62%);
+            transform: translateX(-120%);
+            opacity: 0;
+        }
+
+        .visual-area.tech-in .banner-main::after {
+            animation: techShine 0.85s ease 0.25s forwards;
+        }
+
+        @keyframes techScanMove {
+            0% { top: 0; opacity: 0; }
+            8% { opacity: 1; }
+            92% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        @keyframes techFlashPulse {
+            0%, 100% { opacity: 0; }
+            35% { opacity: 0.85; }
+            70% { opacity: 0.35; }
+        }
+
+        @keyframes techContentOut {
+            to {
+                opacity: 0;
+                transform: translateX(-28px) skewX(-1.5deg);
+                filter: blur(10px) brightness(1.15);
+                clip-path: inset(0 100% 0 0);
+            }
+        }
+
+        @keyframes techVisualOut {
+            to {
+                opacity: 0;
+                transform: translateX(36px) scale(1.03);
+                filter: blur(12px) contrast(1.2) saturate(0.6);
+                clip-path: inset(0 0 0 100%);
+            }
+        }
+
+        @keyframes techTextReveal {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+                clip-path: inset(100% 0 0 0);
+                filter: blur(6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                clip-path: inset(0 0 0 0);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes techBarGrow {
+            from {
+                height: 0;
+                box-shadow: none;
+            }
+            to {
+                height: 68px;
+                box-shadow: 0 0 14px rgba(55, 120, 229, 0.55);
+            }
+        }
+
+        @keyframes techImageIn {
+            0% {
+                opacity: 0;
+                transform: scale(1.1);
+                clip-path: inset(0 0 0 100%);
+                filter: blur(14px) saturate(0.4) brightness(0.8);
+            }
+            45% {
+                filter: blur(3px) saturate(1.3) brightness(1.08);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+                clip-path: inset(0 0 0 0);
+                filter: blur(0) saturate(1) brightness(1);
+            }
+        }
+
+        @keyframes techStripeIn {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+                filter: blur(4px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes techShine {
+            0% { transform: translateX(-120%); opacity: 0; }
+            15% { opacity: 1; }
+            100% { transform: translateX(120%); opacity: 0; }
         }
 
         .banner-main img {
@@ -341,7 +543,7 @@
         /* iPad 竖屏 / 小平板：等比缩放 */
         @media (max-width: 900px) and (min-width: 601px) {
             .mihoyo-section {
-                padding: 32px 0 48px;
+                padding: 0 0 48px;
             }
             .stage {
                 transform: scale(calc((100vw - 24px) / 1360));
@@ -354,7 +556,7 @@
         /* 手机：纵向堆叠布局 */
         @media (max-width: 600px) {
             .mihoyo-section {
-                padding: 24px 0 32px;
+                padding: 0 0 32px;
             }
 
             .stage-wrap {
@@ -500,6 +702,10 @@
     <section class="mihoyo-section">
         <div class="stage-wrap">
             <div class="stage">
+                <div class="tech-overlay" aria-hidden="true">
+                    <div class="tech-flash"></div>
+                    <div class="tech-scan"></div>
+                </div>
                 <div class="side-label">I want to sleep....</div>
 
                 <div class="news-content" id="newsContent">
@@ -520,7 +726,7 @@
                     </div>
                 </div>
 
-                <div class="visual-area">
+                <div class="visual-area" id="visualArea">
                     <a class="news-banner" id="bannerLink" href="#" target="_blank">
                         <div class="stripe-deco" id="stripeDeco">
                             <img class="stripe-bg-img" id="bgImage" src="" alt="">
@@ -652,52 +858,84 @@
         let currentGroup = 0;
         let activeIndex = 0;
         let isInitial = true;
+        let isAnimating = false;
         const itemsPerGroup = 4;
 
-        function switchNews(index, skipAnim = false) {
+        const newsContent = document.getElementById('newsContent');
+        const visualArea = document.getElementById('visualArea');
+        const stage = document.querySelector('.stage');
+
+        function wait(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function resetTechAnim() {
+            stage.classList.remove('tech-active');
+            newsContent.classList.remove('tech-out', 'tech-in');
+            visualArea.classList.remove('tech-out', 'tech-in');
+        }
+
+        function applyImagePosition(mainImg, bgImg, src) {
+            const temp = new Image();
+            temp.onload = () => {
+                const pos = temp.height > temp.width ? 'center 18%' : 'center center';
+                mainImg.style.objectPosition = pos;
+                bgImg.style.objectPosition = pos;
+            };
+            temp.src = src;
+        }
+
+        function applyNewsContent(data) {
+            document.getElementById('dateText').textContent = data.date;
+            document.getElementById('yearText').textContent = data.year;
+            document.getElementById('newsTitle').textContent = data.title;
+            document.getElementById('newsDesc').textContent = data.desc;
+            document.getElementById('bannerText').innerText = data.text;
+            document.getElementById('readMoreBtn').href = data.link;
+            document.getElementById('bannerLink').href = data.link;
+
+            const mainImg = document.getElementById('mainImage');
+            const bgImg = document.getElementById('bgImage');
+            mainImg.src = data.image;
+            bgImg.src = data.image;
+            applyImagePosition(mainImg, bgImg, data.image);
+            renderPagination();
+        }
+
+        async function switchNews(index, skipAnim = false) {
             const data = newsData[index];
-            if (!data) return;
+            if (!data || (index === activeIndex && !skipAnim)) return;
+            if (isAnimating) return;
 
             activeIndex = index;
 
-            const updateContent = () => {
-                document.getElementById('dateText').textContent = data.date;
-                document.getElementById('yearText').textContent = data.year;
-                document.getElementById('newsTitle').textContent = data.title;
-                document.getElementById('newsDesc').textContent = data.desc;
-                document.getElementById('bannerText').innerText = data.text;
-                document.getElementById('readMoreBtn').href = data.link;
-                document.getElementById('bannerLink').href = data.link;
-
-                const mainImg = document.getElementById('mainImage');
-                const bgImg = document.getElementById('bgImage');
-                mainImg.src = data.image;
-                bgImg.src = data.image;
-
-                // 根据图片比例自动调整裁剪焦点
-                const temp = new Image();
-                temp.onload = () => {
-                    const pos = temp.height > temp.width ? 'center 18%' : 'center center';
-                    mainImg.style.objectPosition = pos;
-                    bgImg.style.objectPosition = pos;
-                };
-                temp.src = data.image;
-
-                document.getElementById('newsContent').classList.remove('fade-out');
-                document.getElementById('bannerMain').classList.remove('fade-out');
-                document.getElementById('stripeDeco').classList.remove('fade-out');
-                renderPagination();
-            };
-
-            if (skipAnim) {
-                updateContent();
-            } else {
-                isInitial = false;
-                document.getElementById('newsContent').classList.add('fade-out');
-                document.getElementById('bannerMain').classList.add('fade-out');
-                document.getElementById('stripeDeco').classList.add('fade-out');
-                setTimeout(updateContent, 300);
+            if (skipAnim || isInitial) {
+                applyNewsContent(data);
+                return;
             }
+
+            isAnimating = true;
+            isInitial = false;
+
+            stage.classList.add('tech-active');
+            newsContent.classList.add('tech-out');
+            visualArea.classList.add('tech-out');
+
+            await wait(420);
+
+            applyNewsContent(data);
+
+            newsContent.classList.remove('tech-out');
+            visualArea.classList.remove('tech-out');
+            void newsContent.offsetWidth;
+
+            newsContent.classList.add('tech-in');
+            visualArea.classList.add('tech-in');
+
+            await wait(820);
+
+            resetTechAnim();
+            isAnimating = false;
         }
 
         function renderPagination() {
