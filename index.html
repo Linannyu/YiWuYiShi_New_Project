@@ -4,638 +4,507 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>采访的展示</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
+            min-height: 100%;
+            overflow-x: hidden;
         }
 
         body {
-            font-family: 'ZCOOL KuaiLe', "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
-            background:transparent !important;  /* 设置背景透明以适应外部背景 */ 
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
             color: #242933;
+            background: #fff;
+        }
+
+        /* ── 整页网格底纹 ── */
+        .mihoyo-section {
+            position: relative;
+            padding: 48px 0 64px;
+            background-color: #fafbfc;
+            background-image:
+                linear-gradient(rgba(220, 224, 230, 0.55) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(220, 224, 230, 0.55) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* 固定画布，整体缩放（米哈游同款比例） */
+        .stage-wrap {
+            width: 100%;
             display: flex;
-            align-items: center;
             justify-content: center;
-            width: 100%;
-            height: 100%;
+            overflow: hidden;
         }
 
-        .container {
-            max-width: 100%;
-            width: 100%;
-            margin: 0 auto;
-            padding: 40px 80px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 80px;
+        .stage {
             position: relative;
-            box-sizing: border-box;
+            width: 1360px;
+            height: 660px;
+            flex-shrink: 0;
+            transform-origin: top center;
         }
 
-        /* 左侧文字区域 */
+        /* 左侧竖排字 */
+        .side-label {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            writing-mode: vertical-rl;
+            font-size: 10px;
+            letter-spacing: 0.42em;
+            color: #c8cdd6;
+            white-space: nowrap;
+            text-transform: uppercase;
+            user-select: none;
+        }
+
+        /* ── 左侧文字区（独立，不被图片遮挡） ── */
         .news-content {
-            flex: 0 0 auto;
-            min-width: 550px;
-            max-width: 650px;
-            position: relative;
+            position: absolute;
+            left: 108px;
+            top: 72px;
+            width: 400px;
+            height: 500px;
             z-index: 10;
         }
 
+        .news-content::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 6px;
+            width: 5px;
+            height: 68px;
+            background: #3778e5;
+        }
+
         .news-date {
-            margin-bottom: 50px;
-            transition: opacity 0.5s;
+            margin-bottom: 32px;
+            transition: opacity 0.35s;
         }
 
         .news-date .date {
-            font-size: 100px;
+            font-size: 108px;
             font-weight: 300;
             color: #dee1e6;
-            line-height: 1;
-            margin-bottom: 10px;
+            line-height: 0.92;
+            letter-spacing: -3px;
         }
 
         .news-date .year {
-            font-size: 30px;
+            font-size: 32px;
             color: #dee1e6;
             font-weight: 300;
+            margin-top: 2px;
+            padding-left: 2px;
         }
 
         .news-title {
-            font-size: 36px;
-            font-weight: bold;
+            font-size: 30px;
+            font-weight: 700;
             color: #242933;
-            margin-bottom: 25px;
-            line-height: 1.4;
+            margin-bottom: 18px;
+            line-height: 1.42;
             cursor: pointer;
-            transition: color 0.3s, opacity 0.5s;
+            transition: color 0.3s, opacity 0.35s;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            text-overflow: ellipsis;
+            min-height: calc(30px * 1.42 * 2);
         }
 
-        .news-title:hover {
-            color: #3778e5;
-        }
+        .news-title:hover { color: #3778e5; }
 
         .news-desc {
-            font-size: 16px;
-            line-height: 1.8;
+            font-size: 14px;
+            line-height: 1.9;
             color: #676b73;
-            margin-bottom: 35px;
-            height: 140px;
+            height: calc(14px * 1.9 * 4);
+            margin-bottom: 28px;
             overflow: hidden;
-            transition: opacity 0.5s;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 4;
+            line-clamp: 4;
+            text-overflow: ellipsis;
+            transition: opacity 0.35s;
         }
-        
-        /* 动画过渡 */
-        .fade-out {
-            opacity: 0 !important;
+
+        .fade-out { opacity: 0 !important; }
+
+        .news-footer {
+            position: absolute;
+            left: 0;
+            top: 408px;
+            width: 100%;
         }
 
         .read-more {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-size: 14px;
-            font-weight: bold;
+            font-size: 13px;
+            font-weight: 700;
             color: #3778e5;
             text-transform: uppercase;
             text-decoration: none;
-            margin-bottom: 50px;
-            position: relative;
-            padding-bottom: 4px;
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s;
+            letter-spacing: 0.04em;
+            margin-bottom: 32px;
+            border-bottom: 1px solid transparent;
+            padding-bottom: 2px;
+            transition: border-color 0.2s;
         }
 
-        .read-more:hover {
-            border-bottom-color: #3778e5;
+        .read-more:hover { border-bottom-color: #3778e5; }
+
+        .read-more .arrows {
+            font-size: 11px;
+            letter-spacing: -1px;
         }
 
-        /* 分页 */
         .pagination {
             display: flex;
-            gap: 15px;
-            margin-top: 40px;
+            gap: 10px;
             align-items: center;
         }
 
         .page-btn {
-            width: 50px;
-            height: 50px;
-            border: 1px solid #c9d0d8;
-            background: #f8f9fb;
+            width: 42px;
+            height: 42px;
+            border: 1px solid #dee1e6;
+            background: transparent;
             color: #dee1e6;
-            font-size: 20px;
+            font-size: 15px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 8px;
         }
 
         .page-btn:hover {
             color: #3778e5;
             border-color: #3778e5;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(55, 120, 229, 0.1);
         }
 
         .page-btn.active {
             color: #676b73;
             border-color: #676b73;
-            transform: scale(1.1);
         }
 
         .page-btn.nav-btn {
             background: #242933;
-            color: white;
-            border: none;
-            font-weight: bold;
+            color: #fff;
+            border-color: #242933;
         }
 
-        /* 右侧图片区域 */
-        .news-banner {
-            flex: 1;
-            position: relative;
-            height: 500px;
-            max-width: 100%;
-            min-width: 0;
-        }
-
-        /* 背景虚化图片层 */
-        .banner-bg {
+        /* ── 右侧视觉区 ── */
+        .visual-area {
             position: absolute;
-            right: 0;
-            bottom: -80px;
-            width: 620px;
-            height: 672px;
+            left: 480px;
+            top: 28px;
+            width: 800px;
+            height: 540px;
+        }
+
+        .news-banner {
+            display: block;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+        }
+
+        /* 背景层：同一张图模糊 + 斜纹（米哈游原版逻辑） */
+        .stripe-deco {
+            position: absolute;
+            right: 24px;
+            top: 12px;
+            width: 440px;
+            height: 520px;
             overflow: hidden;
             z-index: 1;
+            transition: opacity 0.35s;
         }
 
-        .banner-bg-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: blur(2px) brightness(1.1);
-            opacity: 0.8;
-            transform: scale(1.15);
-            transition: opacity 0.5s, transform 0.5s;
-        }
-
-        /* 斜线装饰层 - 从右上往左下（-45度） */
-        .banner-bg::before {
-            content: '';
+        .stripe-bg-img {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
+            inset: -5%;
+            width: 110%;
+            height: 110%;
+            object-fit: cover;
+            object-position: center center;
+            filter: blur(1px) brightness(1.04) saturate(0.95);
+            opacity: 0.72;
+            transition: opacity 0.35s, transform 0.5s;
+        }
+
+        .stripe-pattern {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background-color: rgba(232, 235, 240, 0.48);
+            background-image: repeating-linear-gradient(
                 -45deg,
                 transparent,
-                transparent 0 4px,
-                rgb(0, 0, 0, 0.7) 6px
+                transparent 4px,
+                rgba(255, 255, 255, 0.82) 4px,
+                rgba(255, 255, 255, 0.82) 7px
             );
-            z-index: 2;
             pointer-events: none;
-            opacity: 0.4;
         }
-
-    
 
         /* 主图 */
         .banner-main {
-            position: relative;
+            position: absolute;
+            left: 300px;
+            top: 100px;
+            width: 400px;
+            height: 380px;
             z-index: 3;
-            width: 620px;
-            height: 500px;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            background: #e8ebf0;
+            transition: opacity 0.35s;
         }
 
         .banner-main img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s, opacity 0.5s;
+            object-position: center 20%;
+            transition: transform 0.5s, opacity 0.35s;
         }
 
-        .banner-main:hover img {
-            transform: scale(1.05);
+        .news-banner:hover .banner-main img {
+            transform: scale(1.03);
         }
 
-        /* 图片上的文字覆盖 */
         .banner-text {
             position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translate(-50%);
+            inset: 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
             z-index: 4;
-            color: white;
-            font-size: 56px;
-            font-weight: bold;
-            text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.7);
-            white-space: nowrap;
-            letter-spacing: 4px;
+            color: #fff;
+            font-size: 36px;
+            font-weight: 700;
+            text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55);
+            letter-spacing: 0.06em;
             pointer-events: none;
+            text-align: center;
+            padding: 24px 24px 52px;
+            white-space: pre-line;
+            line-height: 1.25;
         }
 
-        /* 垂直标语 */
-        .vertical-slogan {
+        /* 底部「查看更多」按钮 */
+        .view-more-wrap {
             position: absolute;
-            left: -100px;
-            top: 50%;
-            transform: translateY(-50%) rotate(-90deg);
-            font-size: 12px;
-            color: #dee1e6;
-            letter-spacing: 8px;
-            white-space: nowrap;
-            z-index: 1;
-            text-transform: uppercase;
-        }
-                
-        @media (max-width: 1000px) {
-            .vertical-slogan {
-                left: -60px;
-                font-size: 10px;
-                letter-spacing: 6px;
-            }
-        }
-        
-        @media (max-width: 800px) {
-            .vertical-slogan {
-                left: -50px;
-                font-size: 9px;
-                letter-spacing: 4px;
-            }
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
         }
 
-        /* 响应式 */
+        .view-more-btn {
+            display: inline-block;
+            padding: 14px 72px;
+            font-size: 14px;
+            color: #676b73;
+            text-decoration: none;
+            border: 1px solid #c5cad3;
+            background: transparent;
+            clip-path: polygon(16px 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 16px 100%, 0 50%);
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .view-more-btn:hover {
+            color: #3778e5;
+            border-color: #3778e5;
+        }
+
+        /* 响应式：整画布等比缩放 */
         @media (max-width: 1400px) {
-            .container {
-                padding: 40px 60px;
-                gap: 60px;
+            .stage {
+                transform: scale(calc((100vw - 32px) / 1360));
             }
-            
-            .news-content {
-                min-width: 400px;
-                max-width: 480px;
-            }
-            
-            .news-banner {
-                max-width: 600px;
-                height: 400px;
-            }
-            
-            .banner-main {
-                width: 500px;
-                height: 400px;
-            }
-            
-            .banner-bg {
-                width: 500px;
-                height: 540px;
+            .stage-wrap {
+                height: calc(660px * ((100vw - 32px) / 1360));
             }
         }
 
-        @media (max-width: 1200px) {
-            .container {
-                padding: 35px 50px;
-                gap: 50px;
-            }
-            
-            .news-content {
-                min-width: 350px;
-                max-width: 420px;
-            }
-            
-            .news-date .date {
-                font-size: 60px;
-            }
-            
-            .news-title {
-                font-size: 24px;
-            }
-            
-            .news-banner {
-                max-width: 500px;
-                height: 360px;
-            }
-            
-            .banner-main {
-                width: 450px;
-                height: 360px;
-            }
-            
-            .banner-bg {
-                width: 450px;
-                height: 490px;
-            }
-        }
-        
-        @media (max-width: 1000px) {
-            .container {
-                padding: 30px 40px;
-                gap: 40px;
-            }
-            
-            .news-content {
-                min-width: 300px;
-                max-width: 360px;
-            }
-            
-            .news-date .date {
-                font-size: 50px;
-            }
-            
-            .news-title {
-                font-size: 20px;
-            }
-            
-            .news-desc {
-                font-size: 12px;
-                height: 100px;
-            }
-            
-            .news-banner {
-                max-width: 400px;
-                height: 300px;
-            }
-            
-            .banner-main {
-                width: 380px;
-                height: 300px;
-            }
-            
-            .banner-bg {
-                width: 380px;
-                height: 410px;
-                bottom: -60px;
-            }
-            
-            .banner-text {
-                font-size: 40px;
-                text-align: center;
-            }
-        }
-        
-        @media (max-width: 800px) {
-            .container {
-                padding: 30px 35px;
-                gap: 35px;
-            }
-            
-            .news-content {
-                min-width: 250px;
-                max-width: 300px;
-            }
-            
-            .news-date .date {
-                font-size: 40px;
-            }
-            
-            .news-date .year {
-                font-size: 18px;
-            }
-            
-            .news-title {
-                font-size: 18px;
-                margin-bottom: 15px;
-            }
-            
-            .news-desc {
-                font-size: 11px;
-                height: 90px;
-                margin-bottom: 20px;
-            }
-            
-            .read-more {
-                font-size: 10px;
-                margin-bottom: 30px;
-            }
-            
-            .page-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 16px;
-            }
-            
-            .news-banner {
-                max-width: 350px;
-                height: 260px;
-            }
-            
-            .banner-main {
-                width: 320px;
-                height: 260px;
-            }
-            
-            .banner-bg {
-                width: 320px;
-                height: 350px;
-                bottom: -50px;
-            }
-            
-            .banner-text {
-                font-size: 32px;
-            }
+        @media (max-width: 720px) {
+            .stage-wrap { overflow-x: auto; justify-content: flex-start; }
+            .stage { transform: scale(0.52); transform-origin: top left; }
+            .stage-wrap { height: 350px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- 垂直标语 -->
-        <div class="vertical-slogan">I want to sleep</div>
+    <section class="mihoyo-section">
+        <div class="stage-wrap">
+            <div class="stage">
+                <div class="side-label">I want to sleep....</div>
 
-        <!-- 左侧文字区域 -->
-        <div class="news-content" id="newsContent">
-            <div class="news-date">
-                <div class="date" id="dateText">--/--</div>
-                <div class="year" id="yearText">----</div>
+                <div class="news-content" id="newsContent">
+                    <div class="news-date">
+                        <div class="date" id="dateText">--/--</div>
+                        <div class="year" id="yearText">----</div>
+                    </div>
+
+                    <h1 class="news-title" id="newsTitle">加载中...</h1>
+                    <div class="news-desc" id="newsDesc">正在随机获取一位的精彩采访内容...</div>
+
+                    <div class="news-footer">
+                        <a href="#" target="_blank" id="readMoreBtn" class="read-more">
+                            阅读更多 <span class="arrows">&gt;&gt;&gt;</span>
+                        </a>
+
+                        <div class="pagination" id="pagination"></div>
+                    </div>
+                </div>
+
+                <div class="visual-area">
+                    <a class="news-banner" id="bannerLink" href="#" target="_blank">
+                        <div class="stripe-deco" id="stripeDeco">
+                            <img class="stripe-bg-img" id="bgImage" src="" alt="">
+                            <div class="stripe-pattern"></div>
+                        </div>
+                        <div class="banner-main" id="bannerMain">
+                            <img src="" alt="老师照片" id="mainImage">
+                            <div class="banner-text" id="bannerText">Teacher</div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="view-more-wrap">
+                    <a href="https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/fdr" target="_blank" class="view-more-btn">查看更多采访</a>
+                </div>
             </div>
-
-            <h1 class="news-title" id="newsTitle">加载中...</h1>
-
-            <div class="news-desc" id="newsDesc">正在随机获取一位的精彩采访内容...</div>
-
-            <a href="#" target="_blank" id="readMoreBtn" class="read-more">阅读更多 →</a>
-
-            <div class="pagination" id="pagination"></div>
         </div>
-
-        <a class="news-banner" id="bannerLink" href="#" target="_blank">
-            <div class="banner-bg" id="bannerBg">
-                <img src="" alt="背景" class="banner-bg-img" id="bgImage">
-            </div>
-
-            <div class="banner-main" id="bannerMain">
-                <img src="" alt="老师照片" id="mainImage">
-                <div class="banner-text" id="bannerText">Teacher</div>
-            </div>
-        </a>
-    </div>
+    </section>
 
     <script>
-        // 新闻数据
         const newsData = [
             {
-                date: '05/13',
-                year: '2026',
+                date: '05/13', year: '2026',
                 title: '钢铁与镁:啟彦（Eric) 不为人知的奋斗历程',
                 desc: "每次杠间的起跳、腾空、翻转，最后如钉子般稳扎在垫子上。在观众雷鸣般的掌声中，只是习惯性地拍了拍手上的镁粉，目光中透着一股与年龄不符的沉静。这双布满茧厚厚的手，见证了鄺啟彦（Eric Kai Yin Kwong) 在方位地点的无数次跌倒与飞跃。",
-                image: './img/Eric.jpeg',
-                text: '啟彦（Eric)',
+                image: './img/Eric.jpeg', text: '啟彦（Eric)',
                 link: 'https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/fdr/%E5%AD%A6%E7%94%9F%E6%B4%BB%E5%8A%A8/%E9%92%A2%E9%93%81%E4%B8%8E%E9%95%81%E6%99%B5%E5%BD%A6eric-%E4%B8%8D%E4%B8%BA%E4%BA%BA%E7%9F%A5%E7%9A%84%E5%A5%8B%E6%96%97%E5%8E%86%E7%A8%8B'
             },
             {
-                date: '05/01',
-                year: '2026',
+                date: '05/01', year: '2026',
                 title: '回到母校成为新一代的中文教师--王老师',
                 desc: '这几年FDR高中迎来了一批新进语文教师，其中包括我们温柔美丽，年轻有为的王老师。',
-                image: './img/Ms.Wang.jpeg',
-                text: 'Ms.Wang',
+                image: './img/Ms.Wang.jpeg', text: 'Ms.Wang',
                 link: 'https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/fdr/fdr%E7%9A%84%E8%80%81%E5%B8%88%E4%BB%AC/%E5%9B%9E%E5%88%B0%E6%AF%8D%E6%A0%A1%E6%88%90%E4%B8%BA%E6%96%B0%E4%B8%80%E4%BB%A3%E7%9A%84%E4%B8%AD%E6%96%87%E6%95%99%E5%B8%88-%E7%8E%8B%E8%80%81%E5%B8%88'
             },
             {
-                date: '04/27',
-                year: '2026',
+                date: '04/27', year: '2026',
                 title: 'Ms.Mervat--ENL部门的灵魂人物',
                 desc: 'Today, it is my honor to interview Ms. Mervat, our ENL/World Language Department’s paraprofessional, and our backbone of the department.  I am happy that Mr. Liang is by my side to share his thoughts about Ms. Mervat’s work.',
-                image: './img/Ms.Mervat.jpeg',
-                text: 'Ms.Mervat',
+                image: './img/Ms.Mervat.jpeg', text: 'Ms.Mervat',
                 link: 'https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/fdr/ms-mervat-enl%E9%83%A8%E9%97%A8%E7%9A%84%E7%81%B5%E9%AD%82%E4%BA%BA%E7%89%A9'
             },
-
             {
-                date: '04/01',
-                year: '2026',
+                date: '04/01', year: '2026',
                 title: '梁老师的人生经验以及对学生的建议',
                 desc: '今天我采访了梁老师，在对答的过程中，梁老师分享了他的人生经历以及他对当今社会的见解，并给予了我丰富的经验和动力。我将这次对话分享给大家，如果你们也对自己的人生感到迷茫，不妨停下来看看我们的对话吧，希望能帮到你！',
-                image: './img/Mr.Liang002.jpeg',
-                text: 'Mr.Liang',
+                image: './img/Mr.Liang002.jpeg', text: 'Mr.Liang',
                 link: 'https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/fdr/fdr%E7%9A%84%E8%80%81%E5%B8%88%E4%BB%AC/%E6%A2%81%E8%80%81%E5%B8%88%E7%9A%84%E4%BA%BA%E7%94%9F%E7%BB%8F%E9%AA%8C%E4%BB%A5%E5%8F%8A%E5%AF%B9%E5%AD%A6%E7%94%9F%E7%9A%84%E5%BB%BA%E8%AE%AE'
             },
             {
-                date: '03/26',
-                year: '2026',
+                date: '03/26', year: '2026',
                 title: '梁师快问快答',
                 desc: '凯琪：梁师，谢谢您抽空接受我们的采访，我会先问你三个问题',
-                image: './img/Mr.Liang001.jpeg',
-                text: 'Mr.Liang',
+                image: './img/Mr.Liang001.jpeg', text: 'Mr.Liang',
                 link: 'https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/fdr/fdr%E7%9A%84%E8%80%81%E5%B8%88%E4%BB%AC/%E6%A2%81%E5%B8%88%E5%BF%AB%E9%97%AE%E5%BF%AB%E7%AD%94'
             },
             {
-                date: '02/09',
-                year: '2026',
+                date: '02/09', year: '2026',
                 title: 'FDR高中世界语言教育的幕后推手 -- Mr.Brown 先生',
                 desc: '今天我们很荣幸采访Mr. Brown, 我们ENL/WL 的副校长. 他是位平易近人的受访者。我们的采访分成几部分。',
-                image: './img/Mr.Brown.png',
-                text: 'Mr.Brown',
-                link: 'https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/fdr/fdr%E7%9A%84%E8%80%81%E5%B8%88%E4%BB%AC/fdr%E9%AB%98%E4%B8%AD%E4%B8%96%E7%95%8C%E8%AF%AD%E8%A8%80%E7%9A%84%E5%B9%95%E5%90%8E%E6%8E%A8%E6%89%8B-mr-brown-%E5%85%88%E7%94%9F'
+                image: './img/Mr.Brown.png', text: 'Mr.Brown',
+                link: 'https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/fdr/fdr%E7%9A%84%E8%80%81%E5%B8%88%E4%BB%AC/fdr%E9%AB%98%E4%B8%AD%E4%B8%96%E7%95%8C%E8%AF%AD%E8%A8%80%E6%95%99%E8%82%B2%E7%9A%84%E5%B9%95%E5%90%8E%E6%8E%A8%E6%89%8B-mr-brown-%E5%85%88%E7%94%9F'
             },
             {
-                date: '01/16',
-                year: '2026',
+                date: '01/16', year: '2026',
                 title: 'FDR高中,在时光缝隙里穿梭的人----邹司阳(Allen)',
                 desc: '我十分荣幸并且忐忑地采访了F D R学生大使-----邹司阳（Allen）。他作为12年级的学长，同时身上兼具乐于助人的良好品质，这次的采访目的不仅为了给新移民学生语言上，学业上的建议，如何融入这所高中，而且为需要面临大学申请季的学生提出珍贵的建议（tips）通过这次采访，从他的语言谈吐可以准确的看出邹司阳（Allen）的礼貌，是个极好的人。同时，我也希望这场采访，能给你质的启发，而且你注定前程似锦，一帆风顺。',
-                image: './img/Allen.jpg',
-                text: '邹司阳',
+                image: './img/Allen.jpg', text: '邹司阳',
                 link: 'https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/fdr/%E5%AD%A6%E7%94%9F%E9%87%87%E8%AE%BF/fdr%E9%AB%98%E4%B8%AD%E5%9C%A8%E6%97%B6%E5%85%89%E7%BC%9D%E9%9A%99%E9%87%8C%E7%A9%BF%E6%A2%AD%E7%9A%84%E4%BA%BA-%E9%82%B9%E5%8F%B8%E9%98%B3allen'
             },
             {
-                date: '01/13',
-                year: '2026',
+                date: '01/13', year: '2026',
                 title: '喜欢与学生有真实交流的杨老师',
                 desc: '我们年轻有为的杨老师，是位爱好古典文学的中文老师。他把那些文言故事壹壹背下来。上学年，同学们有幸在梁老师的班上亲眼目睹杨老师铿锵有力地背诵初唐大才子王勃的千古骈文《滕王阁序》。今天，我以书信的方式来跟杨老师做一个采访。',
-                image: './img/Mr.Yang.png',
-                text: 'Mr.Yang',
+                image: './img/Mr.Yang.png', text: 'Mr.Yang',
                 link: 'https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/fdr/fdr%E7%9A%84%E8%80%81%E5%B8%88%E4%BB%AC/%E5%96%9C%E6%AC%A2%E4%B8%8E%E5%AD%A6%E7%94%9F%E6%9C%89%E7%9C%9F%E5%AE%9E%E4%BA%A4%E6%B5%81%E7%9A%84%E6%9D%A8%E8%80%81%E5%B8%88'
             },
             {
-                date: '01/09',
-                year: '2026',
+                date: '01/09', year: '2026',
                 title: '让学生把文化融入学习和活动而建立自信的——董妈妈',
                 desc: '董老师最近忙于学生的歌唱比赛和为了本校的春晚节目的练习，没有直接接受访问，所以，我直接用书信的方式来访问这位对于我们中国学生举足轻重的中文老师，也是我们Movie Club 的Advisor.',
-                image: './img/Ms.Dong.png',
-                text: 'Ms.Dong',
+                image: './img/Ms.Dong.png', text: 'Ms.Dong',
                 link: 'https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/fdr/fdr%E7%9A%84%E8%80%81%E5%B8%88%E4%BB%AC/%E8%AE%A9%E5%AD%A6%E7%94%9F%E6%8A%8A%E6%96%87%E5%8C%96%E8%9E%8D%E5%85%A5%E5%AD%A6%E4%B9%A0%E5%92%8C%E6%B4%BB%E5%8A%A8%E8%80%8C%E5%BB%BA%E7%AB%8B%E8%87%AA%E4%BF%A1%E7%9A%84-%E8%91%A3%E5%A6%88%E5%A6%88'
             },
             {
-                date: '01/06',
-                year: '2026',
+                date: '01/06', year: '2026',
                 title: '能用实用的思路和方法把抽象复杂的数学题讲得透彻易懂，鲜活深刻的刘老师',
                 desc: '很荣幸有这次机会对我们FDR数学系刘老师（Ms.Liu）进行了采访，让我们可以更好了解刘老师对数学的看法，和刘老师与数学的相爱相杀。',
-                image: './img/IMG_2263.jpeg',
-                text: 'Ms.Liu',
+                image: './img/IMG_2263.jpeg', text: 'Ms.Liu',
                 link: 'https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/fdr/fdr%E7%9A%84%E8%80%81%E5%B8%88%E4%BB%AC/%E8%83%BD%E7%94%A8%E5%AE%9E%E7%94%A8%E7%9A%84%E6%80%9D%E8%B7%AF%E5%92%8C%E6%96%B9%E6%B3%95%E6%8A%8A%E6%8A%BD%E8%B1%A1%E5%A4%8D%E6%9D%82%E7%9A%84%E6%95%B0%E5%AD%A6%E9%A2%98%E8%AE%B2%E5%BE%97%E9%80%8F%E5%BD%BB%E6%98%93%E6%87%82%E9%B2%9C%E6%B4%BB%E6%B7%B1%E5%88%BB%E7%9A%84%E5%88%98%E8%80%81%E5%B8%88'
             },
             {
-                date: '01/06',
-                year: '2026',
+                date: '01/06', year: '2026',
                 title: '能讓學生用歷史主動了解世界的周老師',
                 desc: '大家好，以下是我對歷史周老師进行的採訪，本次訪問我採用了書面訪問的形式，圍繞許多關於周老師在安排歷史學習的方法及其意義展開，希望各位可以通過這次採訪來更具體的了解周老師 ',
-                image: './img/Ms.Chou.png',
-                text: 'Ms.Chou',
-                link: 'https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/fdr/fdr%E7%9A%84%E8%80%81%E5%B8%88%E4%BB%AC/%E8%83%BD%E8%AE%A9%E5%AD%A6%E7%94%9F%E7%94%A8%E5%8E%86%E5%8F%B2%E4%B8%BB%E5%8A%A8%E4%BA%86%E8%A7%A3%E4%B8%96%E7%95%8C%E7%9A%84%E5%91%A8%E8%80%81%E5%B8%88'
+                image: './img/Ms.Chou.png', text: 'Ms.Chou',
+                link: 'https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/fdr/fdr%E7%9A%84%E8%80%81%E5%B8%88%E4%BB%AC/%E8%83%BD%E8%AE%A9%E5%AD%A6%E7%94%9F%E7%94%A8%E5%8E%86%E5%8F%B2%E4%B8%BB%E5%8B%95%E4%BA%86%E8%A7%A3%E4%B8%96%E7%95%8C%E7%9A%84%E5%91%A8%E8%80%81%E5%B8%88'
             },
             {
-                date: '12/04',
-                year: '2025',
+                date: '12/04', year: '2025',
                 title: '充满活力的魏老师',
                 desc: '十一月二十三日的时候，我和宋婕同学采用了"书面采访"的方式访问了我们的历史老师-魏老师，希望大家能通过这篇采访能更了解魏老师^-^',
-                image: './img/Ms.Wei.png',
-                text: 'Ms.Wei',
+                image: './img/Ms.Wei.png', text: 'Ms.Wei',
                 link: 'https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/fdr/fdr%E7%9A%84%E8%80%81%E5%B8%88%E4%BB%AC/%E5%BE%88%E6%9C%89%E6%B4%BB%E5%8A%9B%E7%9A%84-%E5%8E%86%E5%8F%B2%E9%AD%8F%E8%80%81%E5%B8%88'
             },
             {
-                date: '04/01',
-                year: '2023',
+                date: '04/01', year: '2023',
                 title: 'Ms.Qadri和Mr.Stephens',
                 desc: '三月三十日, 我们向学校(FDR)的科学系生物班老师Ms.Qadri和Mr.Stephens进行了采访,了解他们上课时的教学方法, 也讨论了他们是如何给学生营造出良好的氛围和环境等问题， 让大家更了解他们的工作...',
-                image: './img/Ms.Qadri-and-Mr.Stephens.png',
-                text: 'Ms.Qadri \n and \n Mr.Stephens',
+                image: './img/Ms.Qadri-and-Mr.Stephens.png', text: 'Ms.Qadri \n and \n Mr.Stephens',
                 link: 'https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/fdr/fdr%E7%9A%84%E8%80%81%E5%B8%88%E4%BB%AC/%E4%BA%86%E8%A7%A3fdr%E4%B8%A4%E4%BD%8D%E7%A7%91%E5%AD%A6%E8%80%81%E5%B8%88%E8%83%8C%E5%90%8E%E7%9A%84%E5%B7%A5%E4%BD%9C'
             },
             {
-                date: '04/20',
-                year: '2023',
+                date: '04/20', year: '2023',
                 title: '张老师的独家采访',
                 desc: '今天我采访了一位受到学生们热爱的化学老师。虽然他仅来到我们学校三年，但他已经在学生中建立了很好的声誉。他的教学方式非常有趣，让学生们喜欢学习化学，其中包括我自己。在这次的采访中，张老师分享了关于他的经历，让我们了解更多关于张老师的故事...',
-                image: './img/Mr.Zhang.png',
-                text: 'Mr.Zhang',
+                image: './img/Mr.Zhang.png', text: 'Mr.Zhang',
                 link: 'https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/fdr/fdr%E7%9A%84%E8%80%81%E5%B8%88%E4%BB%AC/%E5%BC%A0%E8%80%81%E5%B8%88%E7%9A%84%E7%8B%AC%E5%AE%B6%E9%87%87%E8%AE%BF'
             },
             {
-                date: '03/29',
-                year: '2023',
+                date: '03/29', year: '2023',
                 title: '杨辅导员的访问',
                 desc: '我们此次采访杨辅导员的主要目的是为了让学生们可以更好的了解辅导员的工作。首先来介绍一下我们杨辅导员的背景, 杨辅导员出生于中国也在中国长大, 大概在26岁的时候决定要来美国读书读研究生。她在中国一直读到大学本科毕业, 当时所读的专业是经济学, 所以她毕业之后按部就班的去银行工作了一年。全职工作...',
-                image: './img/Ms.Yang.png',
-                text: 'Ms.Yang',
+                image: './img/Ms.Yang.png', text: 'Ms.Yang',
                 link: 'https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/fdr/fdr%E7%9A%84%E8%80%81%E5%B8%88%E4%BB%AC/fdr-high-school-%E6%9D%A8%E8%BE%85%E5%AF%BC%E5%91%98%E7%9A%84%E8%AE%BF%E9%97%AE'
             }
         ];
 
-
-        // 2. 状态变量
-        let currentGroup = 0; // 0 代表 1-4, 1 代表 5-8
+        let currentGroup = 0;
         let activeIndex = 0;
-        let isInitial = true; 
+        let isInitial = true;
         const itemsPerGroup = 4;
 
-        // 3. 核心函数：切换新闻
         function switchNews(index, skipAnim = false) {
             const data = newsData[index];
             if (!data) return;
@@ -643,102 +512,82 @@
             activeIndex = index;
 
             const updateContent = () => {
-                document.getElementById("dateText").textContent = data.date;
-                document.getElementById("yearText").textContent = data.year;
-                document.getElementById("newsTitle").textContent = data.title;
-                document.getElementById("newsDesc").textContent = data.desc;
-                document.getElementById("bannerText").innerText = data.text;
-                document.getElementById("readMoreBtn").href = data.link;
-                document.getElementById("bannerLink").href = data.link;
+                document.getElementById('dateText').textContent = data.date;
+                document.getElementById('yearText').textContent = data.year;
+                document.getElementById('newsTitle').textContent = data.title;
+                document.getElementById('newsDesc').textContent = data.desc;
+                document.getElementById('bannerText').innerText = data.text;
+                document.getElementById('readMoreBtn').href = data.link;
+                document.getElementById('bannerLink').href = data.link;
 
-                // 更新图片
-                document.getElementById("mainImage").src = data.image;
-                document.getElementById("bgImage").src = data.image;
+                const mainImg = document.getElementById('mainImage');
+                const bgImg = document.getElementById('bgImage');
+                mainImg.src = data.image;
+                bgImg.src = data.image;
 
-                // 移除淡出类（触发淡入动画）
+                // 根据图片比例自动调整裁剪焦点
+                const temp = new Image();
+                temp.onload = () => {
+                    const pos = temp.height > temp.width ? 'center 18%' : 'center center';
+                    mainImg.style.objectPosition = pos;
+                    bgImg.style.objectPosition = pos;
+                };
+                temp.src = data.image;
+
                 document.getElementById('newsContent').classList.remove('fade-out');
                 document.getElementById('bannerMain').classList.remove('fade-out');
-                document.getElementById('bannerBg').classList.remove('fade-out');
-                
-                // 重新渲染分页以更新高亮
+                document.getElementById('stripeDeco').classList.remove('fade-out');
                 renderPagination();
             };
 
             if (skipAnim) {
                 updateContent();
             } else {
-                // 用户点击后，取消初始状态，开启高亮及对应组数显示
-                isInitial = false; 
+                isInitial = false;
                 document.getElementById('newsContent').classList.add('fade-out');
                 document.getElementById('bannerMain').classList.add('fade-out');
-                document.getElementById('bannerBg').classList.add('fade-out');
+                document.getElementById('stripeDeco').classList.add('fade-out');
                 setTimeout(updateContent, 300);
             }
         }
 
-        // 4. 核心函数：渲染分页按钮
         function renderPagination() {
             const container = document.getElementById('pagination');
             container.innerHTML = '';
 
-            // 1. 添加“上一组”按钮 (只有不在第0组时显示)
             if (currentGroup > 0) {
                 const prevBtn = document.createElement('div');
                 prevBtn.className = 'page-btn nav-btn';
                 prevBtn.textContent = '<';
-                prevBtn.onclick = () => {
-                    isInitial = false; 
-                    currentGroup--;
-                    renderPagination();
-                };
+                prevBtn.onclick = () => { isInitial = false; currentGroup--; renderPagination(); };
                 container.appendChild(prevBtn);
             }
 
-            // 2. 添加数字按钮
             const startIdx = currentGroup * itemsPerGroup;
             const endIdx = startIdx + itemsPerGroup;
 
             for (let i = startIdx; i < endIdx && i < newsData.length; i++) {
                 const btn = document.createElement('div');
-                const isActive = !isInitial && i === activeIndex;
-                btn.className = `page-btn ${isActive ? 'active' : ''}`;
+                btn.className = `page-btn ${!isInitial && i === activeIndex ? 'active' : ''}`;
                 btn.textContent = i + 1;
-                btn.onclick = () => {
-                    isInitial = false; 
-                    switchNews(i);
-                };
+                btn.onclick = () => { isInitial = false; switchNews(i); };
                 container.appendChild(btn);
             }
 
-            // 3. 添加“下一组”按钮 (只有后面还有数据时显示)
             if (endIdx < newsData.length) {
                 const nextBtn = document.createElement('div');
                 nextBtn.className = 'page-btn nav-btn';
                 nextBtn.textContent = '>';
-                nextBtn.onclick = () => {
-                    isInitial = false; 
-                    currentGroup++;
-                    renderPagination();
-                };
+                nextBtn.onclick = () => { isInitial = false; currentGroup++; renderPagination(); };
                 container.appendChild(nextBtn);
             }
         }
 
-
-
-        // 6. 初始化
         window.onload = () => {
-            isInitial = true; 
-            // 默认显示第一组 (1-4)
-            currentGroup = 0; 
-            
-            // 随机加载内容
-            const randomIndex = Math.floor(Math.random() * newsData.length);
-            switchNews(randomIndex, true); 
-            getResizPageRate();
+            isInitial = true;
+            currentGroup = 0;
+            switchNews(Math.floor(Math.random() * newsData.length), true);
         };
-
-        window.addEventListener('resize', getResizPageRate);
     </script>
 </body>
 </html>
