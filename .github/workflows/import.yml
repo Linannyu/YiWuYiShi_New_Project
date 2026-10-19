@@ -35,7 +35,7 @@ jobs:
           )
           for repo in "${repos[@]}"; do
             url="https://github.com/Lin215A/${repo}.git"
-            branch=$(git ls-remote --symref "$url" HEAD | sed -n 's#ref: refs/heads/\(.*\)[[:space:]]*HEAD#\1#p')
+            branch=$(git ls-remote --symref "$url" HEAD | awk '/^ref:/ {sub("refs/heads/", "", $2); print $2}')
             test -n "$branch"
             git subtree add --prefix="$repo" "$url" "$branch" -m "Import ${repo} history"
           done
