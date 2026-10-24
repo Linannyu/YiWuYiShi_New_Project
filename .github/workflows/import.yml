@@ -1,0 +1,42 @@
+name: Import all repositories
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Import complete Git histories
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          repos=(
+            "Character-Shows"
+            "Natural-carousel"
+            "3000music"
+            "music-web"
+            "zhong"
+            "YIWUYISHI"
+            "Loooong"
+            "Merry-Christmas-FDR"
+            "beifen"
+            "SAVED-LB"
+            "Lun-Bo001"
+            "Lin215A.github.io"
+          )
+          for repo in "${repos[@]}"; do
+            url="https://github.com/Lin215A/${repo}.git"
+            branch=$(git ls-remote --symref "$url" HEAD | awk '/^ref:/ {sub("refs/heads/", "", $2); print $2}')
+            test -n "$branch"
+            git subtree add --prefix="$repo" "$url" "$branch" -m "Import ${repo} history"
+          done
+          git push origin HEAD:main
