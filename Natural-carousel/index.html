@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>自然轮播</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+
+  <!-- Link Swiper's CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+  <!-- 添加Zcool Kuail字体-->
+   <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+
+  <!-- Demo styles -->
+  <style>
+    html,
+    body {
+      position: relative;
+      height: 100%;
+    }
+
+    body {
+      background: #eee;
+      font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      color: #000;
+      margin: 0;
+      padding: 0;
+    }
+
+    .swiper-container {
+      width: 100%;
+      height: 100%;
+    }
+
+    .swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .slide-inner {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      background-size: cover;
+      background-position: center;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      padding-top: 200px;
+      color: #fff;
+    }
+
+    .slide-link {
+      color: #fff !important;
+      font-family: 'ZCOOL KuaiLe', cursive;
+      font-size: clamp(20px, 5vw, 48px);
+      text-decoration: underline;
+     }
+     
+    .black-link {
+      color: #000 !important;
+    }
+
+    /* 外层按钮圆圈 */
+    .swiper-button-next,
+	.swiper-button-prev {
+	  width: 58px;
+	  height: 58px;
+	  border-radius: 50%;
+	  border: 1.5px solid rgba(255, 255, 255, 0.85);
+	  background: transparent;
+	  color: #fff;
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  transition: transform 0.35s ease, border-color 0.35s ease, color 0.35s ease, box-shadow 0.35s ease;
+	  box-shadow: 0 0 18px rgba(0, 0, 0, 0.22);
+	}
+	
+	.swiper-button-next:hover,
+	.swiper-button-prev:hover {
+	  transform: scale(1.12);
+	  border-color: #fff;
+	  color: #fff;
+	  box-shadow: 0 0 26px rgba(255, 255, 255, 0.45);
+	}
+	
+	.swiper-button-next::after,
+	.swiper-button-prev::after {
+	  font-size: 22px;
+	  font-weight: 700;
+	}
+
+	/* 强制覆盖 Swiper 在禁用状态下的视觉样式，保证颜色和不透明度一致 */
+    .swiper-button-disabled,
+    .swiper-button-disabled::after,
+    .swiper-button-disabled svg,
+    .swiper-button-disabled path {
+      opacity: 1 !important;        /* 不变暗 */
+      filter: none !important;      /* 清除任何滤镜 */
+      color: inherit !important;    /* 保持箭头颜色 */
+      fill: currentColor !important;/* 保持 SVG 填充继承颜色 */
+    }
+
+/* 如果希望禁用按钮仍不可点击，保留 pointer-events:none；
+   若想既视觉又可点击，可移除此规则 */
+    .swiper-button-disabled {
+      pointer-events: none !important;
+    }
+
+  </style>
+</head>
+
+<body>
+  <!-- Swiper -->
+  <div class="swiper-container swiper-initialized swiper-horizontal swiper-watch-progress swiper-backface-hidden">
+    <div class="swiper-wrapper" id="swiper-wrapper-b54710425754f797a" aria-live="polite" style="cursor: grab;">
+      <div class="swiper-slide swiper-slide-visible swiper-slide-active" role="group" aria-label="1 / 7" data-swiper-slide-index="5000" style="width: 574px;">
+        <div class="slide-inner" style="background-image: url(image/000.jpg); transform: translate3d(0px, 0px, 0px);">
+          <a href="https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/%E6%96%87%E7%AB%A0%E6%95%99%E8%82%B2/%E8%B6%81%E7%86%84%E7%81%AD%E5%89%8D%E8%BF%98%E5%8F%AF%E4%B8%80%E8%A7%81" target="_blank" rel="noopener noreferrer" class="slide-link">趁熄灭前，还可一见</a>
+        </div>
+      </div>
+
+      <div class="swiper-slide swiper-slide-next" role="group" aria-label="2 / 7" data-swiper-slide-index="1" style="width: 574px;">
+        <div class="slide-inner" style="background-image: url(image/001.jpeg); transform: translate3d(-574px, 0px, 0px);">
+          <a href="https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/fdr/%E5%AD%A6%E7%94%9F%E6%B4%BB%E5%8A%A8/%E9%92%A2%E9%93%81%E4%B8%8E%E9%95%81%E6%99%B5%E5%BD%A6eric-%E4%B8%8D%E4%B8%BA%E4%BA%BA%E7%9F%A5%E7%9A%84%E5%A5%8B%E6%96%97%E5%8E%86%E7%A8%8B" target="_blank" rel="noopener noreferrer" class="slide-link">钢铁与镁:啟彦(Eric)不为人知的奋斗历程</a>
+		</div>
+      </div>
+
+      <div class="swiper-slide" role="group" aria-label="3 / 7" data-swiper-slide-index="2" style="width: 574px;">
+        <div class="slide-inner" style="background-image: url(image/002.jpeg); transform: translate3d(-2296px, 0px, 0px);">
+          <a href="https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/%E6%96%87%E7%AB%A0%E6%95%99%E8%82%B2/%E6%A0%87%E5%87%86%E5%8C%96%E8%80%83%E8%AF%95%E6%98%AF%E6%95%99%E8%82%B2%E6%88%90%E5%8A%9F%E7%9A%84%E6%A0%87%E5%BF%97%E5%90%97" target="_blank" rel="noopener noreferrer" class="slide-link">标准化考试是教育成功的标志吗？</a>
+        </div>
+      </div>
+
+      <div class="swiper-slide" role="group" aria-label="4 / 7" data-swiper-slide-index="3" style="width: 574px;">
+        <div class="slide-inner" style="background-image: url(image/003.jpeg); transform: translate3d(-1148px, 0px, 0px);">
+          <a href="https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/%E6%96%87%E7%AB%A0%E6%95%99%E8%82%B2/%E6%88%91%E7%9A%84%E4%B8%AD%E6%96%87ap%E4%B9%8B%E6%97%85" target="_blank" rel="noopener noreferrer" class="slide-link">我的中文AP之旅</a>
+        </div>
+      </div>
+
+      <div class="swiper-slide" role="group" aria-label="5 / 7" data-swiper-slide-index="4" style="width: 574px;">
+        <div class="slide-inner" style="background-image: url(image/004.jpeg); transform: translate3d(-1722px, 0px, 0px);">
+          <a href="https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/%E6%96%87%E7%AB%A0%E6%95%99%E8%82%B2/%E9%89%B4%E5%8F%A4%E7%9F%A5%E4%BB%8A-%E4%BB%8E%E7%A7%A6%E5%9B%BD%E7%9A%84%E5%85%B4%E8%A1%B0%E7%9C%8B%E4%BB%8A%E5%A4%A9%E7%9A%84%E4%B8%96%E5%B1%80" target="_blank" rel="noopener noreferrer" class="slide-link">鉴古知今--从秦国的兴衰看今天的世局</a>
+        </div>
+      </div>
+       
+      <div class="swiper-slide" role="group" aria-label="6 / 7" data-swiper-slide-index="5" style="width: 574px;">
+        <div class="slide-inner" style="background-image: url(image/005.jpeg); transform: translate3d(-2870px, 0px, 0px);">
+          <a href="https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/%E6%95%85%E4%BA%8B%E5%B0%8F%E8%AF%B4/%E9%95%BF%E7%AF%87%E5%B0%8F%E8%AF%B4/%E9%95%BF%E5%B9%B3%E4%B9%8B%E6%AE%87%E5%8D%B7%E7%9B%AE" target="_blank" rel="noopener noreferrer" class="slide-link">长平之殇卷目</a>
+        </div>
+
+      </div>
+      <div class="swiper-slide" role="group" aria-label="7 / 7" data-swiper-slide-index="6" style="width: 574px;">
+        <div class="slide-inner" style="background-image: url(image/006.jpeg); transform: translate3d(-3444px, 0px, 0px);">
+          <a href="https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/%E6%9C%80%E6%96%B0%E6%96%B0%E9%97%BB" target="_blank" rel="noopener noreferrer" class="slide-link black-link">点击查看更多近期上传的文章</a>
+        </div>
+      </div>
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination swiper-pagination-white"></div>
+    <!-- Navigation -->
+    <div class="swiper-button-next swiper-button-white" tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-b54710425754f797a"></div>
+    <div class="swiper-button-prev swiper-button-white" tabindex="0" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-b54710425754f797a"></div>
+  <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
+
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <!-- Initialize Swiper -->
+  <script>
+    var interleaveOffset = 0.5;
+
+    var swiperOptions = {
+      loop: false,
+      speed: 1500,
+      grabCursor: false,
+      watchSlidesProgress: true,
+      mousewheel: true,
+      keyboard: true,
+      autoplay: {
+        delay: 2500,
+        disableOnInteraction: false
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev"
+      },
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true
+      },
+      on: {
+        progress: function(swiper) {
+          for (var i = 0; i < swiper.slides.length; i++) {
+            var slideProgress = swiper.slides[i].progress;
+            var innerOffset = swiper.width * interleaveOffset;
+            var innerTranslate = slideProgress * innerOffset;
+            swiper.slides[i].querySelector(".slide-inner").style.transform =
+              "translate3d(" + innerTranslate + "px, 0, 0)";
+          }      
+        },
+        touchStart: function(swiper) {
+          for (var i = 0; i < swiper.slides.length; i++) {
+            swiper.slides[i].style.transition = "";
+          }
+        },
+        setTransition: function(swiper, speed) {
+          for (var i = 0; i < swiper.slides.length; i++) {
+            swiper.slides[i].style.transition = speed + "ms";
+            swiper.slides[i].querySelector(".slide-inner").style.transition =
+              speed + "ms";
+          }
+        }
+      }
+    };
+
+    var swiper = new Swiper(".swiper-container", swiperOptions);
+  </script>
+
+
+</body>
+</html>
