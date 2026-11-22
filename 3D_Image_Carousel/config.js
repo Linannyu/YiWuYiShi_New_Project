@@ -44,6 +44,9 @@ window.SITE_CONFIG = {
     { url: G + "%E6%88%91%E7%9C%8B%E5%85%AD%E4%B9%A6",
       title: "我看六书", image: "liushu.jpg" },
 
+    { url: "https://sites.google.com/schools.nyc.gov/yiwuyishi-chinese-website/%E6%96%87%E7%AB%A0%E6%95%99%E8%82%B2/%E4%BB%A5%E8%88%9E%E4%B8%BA%E7%82%AC-%E9%81%87%E8%A7%81%E6%8B%89%E4%B8%81",
+      title: "以舞为炬， 遇见拉丁", image: "ladinwu.jpg" },
+
     /* ↓↓↓ 添加模版 ↓↓↓
     { url: "网页的链接",
       title: "标题名字", image: "图片名字.jpg" },
